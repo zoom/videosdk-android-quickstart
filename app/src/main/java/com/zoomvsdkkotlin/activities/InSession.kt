@@ -107,6 +107,7 @@ fun InSession(navController: NavController, zoomSessionViewModel: ZoomSessionVie
         } else {
             GalleryView(
                 currentUsersInView = currentUsersInView,
+                currentUsersInViewCount = zoomSessionUIState.currentUsersInViewCount,
                 participantVideoOn1 = zoomSessionUIState.participantVideoOn1,
                 participantVideoOn2 = zoomSessionUIState.participantVideoOn2,
                 participantVideoOn3 = zoomSessionUIState.participantVideoOn3,

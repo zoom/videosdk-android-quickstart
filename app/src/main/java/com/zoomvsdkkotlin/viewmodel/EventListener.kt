@@ -51,11 +51,8 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             pp("onSessionJoin")
             val sdkSession: ZoomVideoSDKSession = ZoomVideoSDK.getInstance().session
             val remoteUsers: List<ZoomVideoSDKUser> = sdkSession.remoteUsers
-            val state = zoomViewModel.getState()
 
-            zoomViewModel.updateState(state.copy(userList = remoteUsers))
-
-            if (zoomViewModel.getState().userList.size < 4)
+            if (remoteUsers.size < 4)
                 zoomViewModel.updateUsersInView(1)
         }
 
@@ -80,7 +77,6 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             val state = zoomViewModel.getState()
             val remoteUsers: List<ZoomVideoSDKUser> = sdkSession.remoteUsers
 
-            zoomViewModel.updateState(state.copy(userList = remoteUsers))
             zoomViewModel.updateUsersInView(state.pageNumber)
 
             if (remoteUsers.size == 1) {
@@ -99,8 +95,6 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             val remoteUsers: List<ZoomVideoSDKUser> = sdkSession.remoteUsers
             val state = zoomViewModel.getState()
 
-            println(remoteUsers.size)
-            zoomViewModel.updateState(state.copy(userList = remoteUsers))
             zoomViewModel.updateUsersInView(state.pageNumber)
 
             if (remoteUsers.isEmpty()) {

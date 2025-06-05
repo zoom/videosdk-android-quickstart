@@ -22,6 +22,7 @@ import us.zoom.sdk.ZoomVideoSDKVideoView
 @Composable
 fun GalleryView(
     currentUsersInView: () -> List<ZoomVideoSDKUser>,
+    currentUsersInViewCount: Int,
     renderView: (ZoomVideoSDKUser,ZoomVideoSDKVideoView) -> Unit,
     participantVideoOn1: Boolean,
     participantVideoOn2: Boolean,
@@ -34,7 +35,7 @@ fun GalleryView(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (currentUsersInView().isNotEmpty()) {
+        if (currentUsersInViewCount > 0) {
             if (participantVideoOn1) {
                 Box(
                     modifier = Modifier
@@ -65,8 +66,7 @@ fun GalleryView(
                 }
             }
         }
-        if (currentUsersInView().size > 1) {
-            println("hello")
+        if (currentUsersInViewCount > 1) {
             if (participantVideoOn2) {
                 Box(
                     modifier = Modifier
@@ -97,7 +97,7 @@ fun GalleryView(
                 }
             }
         }
-        if (currentUsersInView().size > 2) {
+        if (currentUsersInViewCount > 2) {
             if (participantVideoOn3) {
                 Box(
                     modifier = Modifier

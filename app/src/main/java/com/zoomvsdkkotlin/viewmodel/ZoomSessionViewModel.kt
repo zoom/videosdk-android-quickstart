@@ -24,7 +24,7 @@ import us.zoom.sdk.ZoomVideoSDKVideoView
 
 data class ZoomSessionUIState(
     val selfView: ZoomVideoSDKVideoView? = null,
-    val userList: List<ZoomVideoSDKUser> = emptyList(),
+    val currentUsersInViewCount: Int = 0,
     val sessionName: String = "",
     val userName: String = "",
     val password: String? = "",
@@ -93,7 +93,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
         _zoomSessionUIState.update {
             it.copy(
                 selfView = null,
-                userList = emptyList(),
+                currentUsersInViewCount = 0,
                 sessionName = "",
                 userName = "",
                 password = "",
@@ -184,9 +184,14 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
             if (size > 1) newState.add(userList[start + 1])
             if (size > 2) newState.add(userList[start + 2])
             this.currentUsersInView = newState.toList()
-            println(this.currentUsersInView.size)
+            _zoomSessionUIState.update {
+                it.copy( currentUsersInViewCount = this.currentUsersInView.size)
+            }
         } else {
             this.currentUsersInView = emptyList()
+            _zoomSessionUIState.update {
+                it.copy( currentUsersInViewCount = 0)
+            }
         }
         _zoomSessionUIState.update { it.copy( pageNumber = page) }
     }
