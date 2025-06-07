@@ -102,8 +102,6 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
 
         Row {
             Button(onClick = {
-                println("making function call")
-
                 val body = JWTOptions(
                     sessionName =  sessionName,
                     role = 1,
