@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntOffset
@@ -36,6 +36,7 @@ import com.zoomvsdkkotlin.sessionviews.BigSelfView
 import com.zoomvsdkkotlin.sessionviews.Controls
 import com.zoomvsdkkotlin.sessionviews.DraggableSelfView
 import com.zoomvsdkkotlin.sessionviews.GalleryView
+import com.zoomvsdkkotlin.sessionviews.IndeterminateCircleLoader
 import com.zoomvsdkkotlin.viewmodel.ZoomSessionViewModel
 import us.zoom.sdk.ZoomVideoSDKUser
 import us.zoom.sdk.ZoomVideoSDKVideoView
@@ -135,21 +136,24 @@ fun InSession(navController: NavController, zoomSessionViewModel: ZoomSessionVie
         )
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .fillMaxWidth()
-    ){
-        if (currentUsersInView().isNotEmpty()) {
+    if (currentUsersInView().isNotEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .fillMaxWidth(),
+        ){
             var offsetX by remember { mutableFloatStateOf(0f) }
             var offsetY by remember { mutableFloatStateOf(0f) }
 
             DraggableSelfView(
                 modifier = Modifier
                     .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-                    .width(124.dp)
-                    .height(236.dp)
-                    .clip(shape = RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
+                    .width(145.dp)
+                    .height(244.dp)
+                    .background(
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(16.dp)
+                    )
                     .pointerInput(Unit) {
                         detectDragGestures { change, dragAmount ->
                             change.consume()
@@ -161,6 +165,20 @@ fun InSession(navController: NavController, zoomSessionViewModel: ZoomSessionVie
                 user = user,
                 isVideoOn = zoomSessionUIState.isVideoOn,
                 renderView = renderView
+            )
+        }
+    }
+
+    if (zoomSessionUIState.sessionLoader) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .background(Color.Black),
+            contentAlignment = Alignment.Center
+        ) {
+            IndeterminateCircleLoader(
+                modifier = Modifier.width(64.dp),
             )
         }
     }

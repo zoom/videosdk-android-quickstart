@@ -47,10 +47,14 @@ data class Config(val sessionName: String, val userName: String, val password: S
 @Composable
 fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionViewModel) {
 
+    //place generated JWT here, if no value is provided the APIClient will be used
+    //to retrieve a token from your specified Endpoint
+    val jwtToken = ""
+
     val scope = rememberCoroutineScope()
 
     var sessionName by remember {
-        mutableStateOf("internal-dev5")
+        mutableStateOf("testSession")
     }
     var userName by remember {
         mutableStateOf("testUser")
@@ -102,40 +106,54 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
 
         Row {
             Button(onClick = {
-                val body = JWTOptions(
-                    sessionName =  sessionName,
-                    role = 1,
-                    userIdentity = null.toString(),
-                    sessionkey = null.toString(),
-                    geo_regions = null.toString(),
-                    cloud_recording_option = 0,
-                    cloud_recording_election = 0,
-                    telemetry_tracking_id = "internal-dev5",
-                    video_webrtc_mode = 0,
-                    audio_webrtc_mode = 0
-                )
 
-                scope.launch {
-                   val call = ApiClient.apiService.getJWT(sessionName, userName, password, body)
+                if (jwtToken.isNotEmpty()) {
+                    val config = Config(sessionName, userName, password, jwtToken)
+                    println(jwtToken)
+                    zoomSessionViewModel.initZoomSDK()
+                    zoomSessionViewModel.joinSession(config)
+                    navController.navigate(Routes.INSESSION)
+                }
+                else {
+                    val body = JWTOptions(
+                        sessionName = sessionName,
+                        role = 1,
+                        userIdentity = null.toString(),
+                        sessionkey = null.toString(),
+                        geo_regions = null.toString(),
+                        cloud_recording_option = 0,
+                        cloud_recording_election = 0,
+                        telemetry_tracking_id = "internal-dev5",
+                        video_webrtc_mode = 0,
+                        audio_webrtc_mode = 0
+                    )
 
-                   call.enqueue(object : Callback<JsonObject> {
-                     override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                        if (response.isSuccessful) {
-                            val jwt = Gson().fromJson(response.body(), Signature::class.java)
-                            val config = Config(sessionName, userName, password, jwt.signature)
-                            println(jwt.signature)
+                    scope.launch {
+                        val call = ApiClient.apiService.getJWT(sessionName, userName, password, body)
 
-                            zoomSessionViewModel.initZoomSDK()
-                            zoomSessionViewModel.joinSession(config)
-                            navController.navigate(Routes.INSESSION)
-                        } else {
-                            println("error")
-                       }
-                      }
-                      override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                          println(t)
-                      }
-                   })
+                        call.enqueue(object : Callback<JsonObject> {
+                            override fun onResponse(
+                                call: Call<JsonObject>,
+                                response: Response<JsonObject>
+                            ) {
+                                if (response.isSuccessful) {
+                                    val jwt = Gson().fromJson(response.body(), Signature::class.java)
+                                    val config = Config(sessionName, userName, password, jwt.signature)
+                                    println(jwt.signature)
+
+                                    zoomSessionViewModel.initZoomSDK()
+                                    zoomSessionViewModel.joinSession(config)
+                                    navController.navigate(Routes.INSESSION)
+                                } else {
+                                    println("error")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                                println(t)
+                            }
+                        })
+                    }
                 }
             }) {
                 Text(text = "Join Session")

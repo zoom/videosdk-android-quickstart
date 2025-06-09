@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil3.compose.AsyncImage
 import us.zoom.sdk.ZoomVideoSDKUser
@@ -23,29 +25,38 @@ fun DraggableSelfView(
     isVideoOn: Boolean,
     renderView: (ZoomVideoSDKUser, ZoomVideoSDKVideoView) -> Unit,
 ){
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
         if (isVideoOn) {
-            AndroidView(
+            Box(
                 modifier = Modifier
-                    .fillMaxHeight(1f)
-                    .fillMaxWidth(),
-                factory = { context: Context ->
-                    ZoomVideoSDKVideoView(context).apply {
-                        setId(4)
+                    .width(124.dp)
+                    .height(236.dp)
+            ) {
+                AndroidView(
+                    factory = { context: Context ->
+                        ZoomVideoSDKVideoView(context).apply {
+                            setId(4)
+                        }
+                    },
+                    update = {
+                        val myselfView: ZoomVideoSDKVideoView = it.findViewById(4)
+                        myselfView.setZOrderOnTop(true)
+                        renderView(user(), myselfView)
                     }
-                },
-                update = {
-                    val myselfView: ZoomVideoSDKVideoView = it.findViewById(4)
-                    myselfView.setZOrderOnTop(true)
-                    renderView(user(), myselfView)
-                }
-            )
+                )
+            }
         } else {
             Box(
                 modifier = Modifier
-                    .fillMaxHeight(1f)
-                    .fillMaxWidth()
-                    .background(Color.LightGray),
+                    .width(124.dp)
+                    .height(236.dp)
+                    .background(
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(16.dp)
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 AsyncImage(

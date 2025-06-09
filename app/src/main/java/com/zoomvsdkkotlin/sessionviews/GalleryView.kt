@@ -3,6 +3,7 @@ package com.zoomvsdkkotlin.sessionviews
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +54,11 @@ fun GalleryView(
                             .fillMaxHeight(height)
                             .weight(1f)
                             .padding(horizontal = 5.dp)
+                            .border(
+                                width = 4.dp,
+                                color = Color.hsl(212F, .6f, .17f),
+                                shape = RoundedCornerShape(16.dp)
+                            ),
                     ) {
                         AndroidView(
                             factory = { context: Context ->
@@ -72,7 +79,11 @@ fun GalleryView(
                             .fillMaxHeight(height)
                             .weight(1f)
                             .padding(horizontal = 5.dp)
-                            .background(Color.Black),
+                            .background(
+                                color = Color.hsl(212F, .6f, .17f),
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                        ,
                         contentAlignment = Alignment.Center
                     ) {
                         AsyncImage(
@@ -90,6 +101,11 @@ fun GalleryView(
                             .fillMaxHeight(.2f)
                             .weight(1f)
                             .padding(horizontal = 5.dp)
+                            .border(
+                                width = 4.dp,
+                                color = Color.hsl(212F, .6f, .17f),
+                                shape = RoundedCornerShape(16.dp)
+                            ),
                     ) {
                         AndroidView(
                             factory = { context: Context ->
@@ -110,7 +126,10 @@ fun GalleryView(
                             .fillMaxHeight(.2f)
                             .weight(1f)
                             .padding(horizontal = 5.dp)
-                            .background(Color.Black),
+                            .background(
+                                color = Color.hsl(212F, .6f, .17f),
+                                shape = RoundedCornerShape(16.dp)
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         AsyncImage(
@@ -127,7 +146,12 @@ fun GalleryView(
                     modifier = Modifier
                         .fillMaxWidth(.5f)
                         .fillMaxHeight(.27f)
-                        .padding(horizontal = 5.dp)
+                        .padding(horizontal = 5.dp, vertical = 10.dp)
+                        .border(
+                            width = 4.dp,
+                            color = Color.hsl(212F, .6f, .17f),
+                            shape = RoundedCornerShape(16.dp)
+                        )
                 ) {
                     AndroidView(
                         factory = { context: Context ->
@@ -146,8 +170,11 @@ fun GalleryView(
                     modifier = Modifier
                         .fillMaxWidth(.5f)
                         .fillMaxHeight(.27f)
-                        .padding(horizontal = 5.dp)
-                        .background(Color.Black),
+                        .padding(horizontal = 5.dp, vertical = 10.dp)
+                        .background(
+                            color = Color.hsl(212F, .6f, .17f),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     AsyncImage(

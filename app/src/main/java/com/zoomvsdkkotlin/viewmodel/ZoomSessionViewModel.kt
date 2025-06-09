@@ -28,7 +28,7 @@ data class ZoomSessionUIState(
     val sessionName: String = "",
     val userName: String = "",
     val password: String? = "",
-    val sessionLoader: Boolean = false,
+    val sessionLoader: Boolean = true,
     val isVideoOn: Boolean = true,
     val muted: Boolean = false,
     val audioConnected: Boolean = false,
