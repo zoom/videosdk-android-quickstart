@@ -29,7 +29,7 @@ data class ZoomSessionUIState(
     val userName: String = "",
     val password: String? = "",
     val sessionLoader: Boolean = true,
-    val isVideoOn: Boolean = true,
+    val isVideoOn: Boolean = false,
     val muted: Boolean = false,
     val audioConnected: Boolean = false,
     val pageNumber: Int = 1,
@@ -43,7 +43,6 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
     private val context: Context = getApplication<Application>().applicationContext
     private val _zoomSessionUIState = MutableStateFlow(ZoomSessionUIState())
     private var currentUsersInView: List<ZoomVideoSDKUser> = emptyList()
-    private var orientation: Int = 0
     val zoomSessionUIState: StateFlow<ZoomSessionUIState> = _zoomSessionUIState.asStateFlow()
 
     fun initZoomSDK () {
@@ -142,7 +141,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
         videoHelper.startVideo()
         _zoomSessionUIState.update { it.copy(isVideoOn = true) }
     }
-    private fun stopVideo() {
+    fun stopVideo() {
         val videoHelper = ZoomVideoSDK.getInstance().videoHelper
 
         videoHelper.stopVideo()

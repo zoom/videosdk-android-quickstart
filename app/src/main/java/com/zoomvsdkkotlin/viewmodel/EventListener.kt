@@ -56,6 +56,7 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             if (remoteUsers.size < 4)
                 zoomViewModel.updateUsersInView(1)
 
+            zoomViewModel.stopVideo()
             zoomViewModel.updateState( state.copy(sessionLoader = false))
         }
 
@@ -159,7 +160,6 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             }
         }
 
-        //--------------------------------------------------
         override fun onUserShareStatusChanged(
             shareHelper: ZoomVideoSDKShareHelper?,
             userInfo: ZoomVideoSDKUser?,
@@ -232,7 +232,7 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             audioHelper: ZoomVideoSDKAudioHelper?,
             list: MutableList<ZoomVideoSDKUser>?
         ) {
-//            pp("onUserActiveAudioChanged")
+            pp("onUserActiveAudioChanged")
         }
 
         override fun onSessionNeedPassword(handler: ZoomVideoSDKPasswordHandler?) {
@@ -394,7 +394,7 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
         }
 
         override fun onMicSpeakerVolumeChanged(micVolume: Int, speakerVolume: Int) {
-//            pp("onMicSpeakerVolumeChanged")
+            pp("onMicSpeakerVolumeChanged")
         }
 
         override fun onCalloutJoinSuccess(user: ZoomVideoSDKUser?, phoneNumber: String?) {
