@@ -22,6 +22,7 @@ import com.google.gson.annotations.SerializedName
 import com.zoomvsdkkotlin.utils.ApiClient
 import com.zoomvsdkkotlin.utils.Routes
 import com.zoomvsdkkotlin.viewmodel.ZoomSessionViewModel
+import io.github.cdimascio.dotenv.dotenv
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,10 +47,14 @@ data class Config(val sessionName: String, val userName: String, val password: S
 
 @Composable
 fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionViewModel) {
+    val dotenv = dotenv {
+        directory = "/assets"
+        filename = "env" // instead of '.env', use 'env'
+    }
 
     //place generated JWT here, if no value is provided the APIClient will be used
     //to retrieve a token from your specified Endpoint
-    val jwtToken = ""
+    val jwtToken = dotenv["JWTToken"]
 
     val scope = rememberCoroutineScope()
 

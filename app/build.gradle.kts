@@ -68,4 +68,6 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    implementation("io.github.cdimascio:dotenv-kotlin:6.5.1")
+
 }
