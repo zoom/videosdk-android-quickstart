@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     val dotenv = dotenv {
         directory = "/assets"
-        filename = "env" // instead of '.env', use 'env'
+        filename = "env"
     }
     private val BASE_URL = dotenv["ENDPOINT_URL"]
 

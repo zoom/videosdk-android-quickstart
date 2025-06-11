@@ -49,7 +49,7 @@ data class Config(val sessionName: String, val userName: String, val password: S
 fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionViewModel) {
     val dotenv = dotenv {
         directory = "/assets"
-        filename = "env" // instead of '.env', use 'env'
+        filename = "env"
     }
 
     //place generated JWT here, if no value is provided the APIClient will be used
@@ -59,7 +59,7 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
     val scope = rememberCoroutineScope()
 
     var sessionName by remember {
-        mutableStateOf("internal-dev5")
+        mutableStateOf("testSession")
     }
     var userName by remember {
         mutableStateOf("testUser")

@@ -47,8 +47,6 @@ fun InSession(navController: NavController, zoomSessionViewModel: ZoomSessionVie
             android.Manifest.permission.CAMERA
         )
     )
-    //https://multithreaded.stitchfix.com/blog/2022/08/05/jetpack-compose-recomposition/
-    //https://stackoverflow.com/questions/77275283/avoiding-compose-recompositions-when-ui-data-class-variables-change
     val user = remember(zoomSessionViewModel) {{
         zoomSessionViewModel.getMyself()
     }}

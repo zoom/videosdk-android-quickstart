@@ -98,7 +98,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
                 userName = "",
                 password = "",
                 sessionLoader = true,
-                isVideoOn = true,
+                isVideoOn = false,
                 muted = false,
                 audioConnected = false,
                 pageNumber = 1,
