@@ -43,6 +43,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
     private val context: Context = getApplication<Application>().applicationContext
     private val _zoomSessionUIState = MutableStateFlow(ZoomSessionUIState())
     private var currentUsersInView: List<ZoomVideoSDKUser> = emptyList()
+    private var orientation: Int = 0
     val zoomSessionUIState: StateFlow<ZoomSessionUIState> = _zoomSessionUIState.asStateFlow()
 
     fun initZoomSDK () {
@@ -97,7 +98,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
                 sessionName = "",
                 userName = "",
                 password = "",
-                sessionLoader = false,
+                sessionLoader = true,
                 isVideoOn = true,
                 muted = false,
                 audioConnected = false,
@@ -115,6 +116,10 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
     }
     fun getState(): ZoomSessionUIState {
         return _zoomSessionUIState.value
+    }
+    fun rotateVideo(rotation: Int) {
+        val videoHelper = ZoomVideoSDK.getInstance().videoHelper
+        videoHelper.rotateMyVideo(rotation)
     }
     fun toggleCamera() {
         val user: ZoomVideoSDKUser = ZoomVideoSDK.getInstance().session.mySelf
@@ -199,7 +204,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
         val canvas: ZoomVideoSDKVideoCanvas = user.videoCanvas
         canvas.subscribe(
             view,
-            ZoomVideoSDKVideoAspect.ZoomVideoSDKVideoAspect_Original,
+            ZoomVideoSDKVideoAspect.ZoomVideoSDKVideoAspect_Full_Filled,
             ZoomVideoSDKVideoResolution.VideoResolution_720P
         )
     }

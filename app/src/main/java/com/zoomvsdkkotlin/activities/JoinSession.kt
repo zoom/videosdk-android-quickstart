@@ -54,7 +54,7 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
     val scope = rememberCoroutineScope()
 
     var sessionName by remember {
-        mutableStateOf("testSession")
+        mutableStateOf("internal-dev5")
     }
     var userName by remember {
         mutableStateOf("testUser")
@@ -106,7 +106,6 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
 
         Row {
             Button(onClick = {
-
                 if (jwtToken.isNotEmpty()) {
                     val config = Config(sessionName, userName, password, jwtToken)
                     println(jwtToken)

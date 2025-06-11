@@ -1,25 +1,22 @@
 package com.zoomvsdkkotlin.sessionviews
 
 import android.annotation.SuppressLint
-import android.content.Context
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import coil3.compose.AsyncImage
 import us.zoom.sdk.ZoomVideoSDKUser
 import us.zoom.sdk.ZoomVideoSDKVideoView
 
@@ -33,157 +30,106 @@ fun GalleryView(
     participantVideoOn2: Boolean,
     participantVideoOn3: Boolean
 ) {
-    val height: Float = if (currentUsersInViewCount > 1) .2f else .3f
+    val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
+    val getUser = remember(currentUsersInView) {{ i: Int  ->  currentUsersInView()[i] }}
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (currentUsersInViewCount > 0) {
-                if (participantVideoOn1) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(1f)
-                            .fillMaxHeight(height)
-                            .weight(1f)
-                            .padding(horizontal = 5.dp)
-                            .border(
-                                width = 4.dp,
-                                color = Color.hsl(212F, .6f, .17f),
-                                shape = RoundedCornerShape(16.dp)
-                            ),
-                    ) {
-                        AndroidView(
-                            factory = { context: Context ->
-                                ZoomVideoSDKVideoView(context).apply {
-                                    setId(1)
-                                }
-                            },
-                            update = {
-                                val zoomView: ZoomVideoSDKVideoView = it.findViewById(1)
-                                renderView(currentUsersInView()[0], zoomView)
-                            }
-                        )
-                    }
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(1f)
-                            .fillMaxHeight(height)
-                            .weight(1f)
-                            .padding(horizontal = 5.dp)
-                            .background(
-                                color = Color.hsl(212F, .6f, .17f),
-                                shape = RoundedCornerShape(16.dp)
-                            )
-                        ,
-                        contentAlignment = Alignment.Center
-                    ) {
-                        AsyncImage(
-                            model = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
-                            contentDescription = "Profile Pic Placeholder when video off",
-                        )
-                    }
-                }
-            }
-            if (currentUsersInViewCount > 1) {
-                if (participantVideoOn2) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(1f)
-                            .fillMaxHeight(.2f)
-                            .weight(1f)
-                            .padding(horizontal = 5.dp)
-                            .border(
-                                width = 4.dp,
-                                color = Color.hsl(212F, .6f, .17f),
-                                shape = RoundedCornerShape(16.dp)
-                            ),
-                    ) {
-                        AndroidView(
-                            factory = { context: Context ->
-                                ZoomVideoSDKVideoView(context).apply {
-                                    setId(2)
-                                }
-                            },
-                            update = {
-                                val zoomView: ZoomVideoSDKVideoView = it.findViewById(2)
-                                renderView(currentUsersInView()[1], zoomView)
-                            }
-                        )
-                    }
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(1f)
-                            .fillMaxHeight(.2f)
-                            .weight(1f)
-                            .padding(horizontal = 5.dp)
-                            .background(
-                                color = Color.hsl(212F, .6f, .17f),
-                                shape = RoundedCornerShape(16.dp)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        AsyncImage(
-                            model = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
-                            contentDescription = "Profile Pic Placeholder when video off",
-                        )
-                    }
-                }
-            }
-        }
-        if (currentUsersInViewCount > 2) {
-            if (participantVideoOn3) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(.5f)
-                        .fillMaxHeight(.27f)
-                        .padding(horizontal = 5.dp, vertical = 10.dp)
-                        .border(
-                            width = 4.dp,
-                            color = Color.hsl(212F, .6f, .17f),
-                            shape = RoundedCornerShape(16.dp)
-                        )
+    BoxWithConstraints() {
+        val boxWidth = maxWidth
+
+        if (isPortrait) {
+            //portrait
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                val width = if (currentUsersInViewCount > 1) boxWidth / 2 else boxWidth
+
+                Row(
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    AndroidView(
-                        factory = { context: Context ->
-                            ZoomVideoSDKVideoView(context).apply {
-                                setId(3)
-                            }
-                        },
-                        update = {
-                            val zoomView: ZoomVideoSDKVideoView = it.findViewById(3)
-                            renderView(currentUsersInView()[2], zoomView)
-                        }
-                    )
+                    if (currentUsersInViewCount > 0) {
+                        UserView(
+                            modifier = Modifier
+                                .size(width)
+                                .padding(horizontal = 5.dp),
+                            user = getUser,
+                            renderView = renderView,
+                            id = 0,
+                            participantVideoOn = participantVideoOn1
+                        )
+                    }
+
+                    if (currentUsersInViewCount > 1) {
+                        UserView(
+                            modifier = Modifier
+                                .size(width)
+                                .padding(horizontal = 5.dp),
+                            user = getUser,
+                            renderView = renderView,
+                            id = 1,
+                            participantVideoOn = participantVideoOn2
+                        )
+                    }
                 }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(.5f)
-                        .fillMaxHeight(.27f)
-                        .padding(horizontal = 5.dp, vertical = 10.dp)
-                        .background(
-                            color = Color.hsl(212F, .6f, .17f),
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    AsyncImage(
-                        model = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
-                        contentDescription = "Profile Pic Placeholder when video off",
+                if (currentUsersInViewCount > 2) {
+                    UserView(
+                        modifier = Modifier
+                            .size(width)
+                            .padding(horizontal = 5.dp, vertical = 10.dp),
+                        user = getUser,
+                        renderView = renderView,
+                        id = 2,
+                        participantVideoOn = participantVideoOn3
                     )
                 }
             }
+        } else {
+            //Landscape
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val width = if (currentUsersInViewCount > 2) boxWidth / 3 else boxWidth / 2
 
+                if (currentUsersInViewCount > 0) {
+                    UserView(
+                        modifier = Modifier
+                            .width(width)
+                            .height(width)
+                            .padding(horizontal = 5.dp),
+                        user = getUser,
+                        renderView = renderView,
+                        id = 0,
+                        participantVideoOn = participantVideoOn1
+                    )
+                }
+                if (currentUsersInViewCount > 1) {
+                    UserView(
+                        modifier = Modifier
+                            .width(width)
+                            .height(width)
+                            .padding(horizontal = 5.dp),
+                        user = getUser,
+                        renderView = renderView,
+                        id = 1,
+                        participantVideoOn = participantVideoOn2
+                    )
+                }
+                if (currentUsersInViewCount > 2) {
+                    UserView(
+                        modifier = Modifier
+                            .width(width)
+                            .height(width)
+                            .padding(horizontal = 5.dp),
+                        user = getUser,
+                        renderView = renderView,
+                        id = 2,
+                        participantVideoOn = participantVideoOn3
+                    )
+                }
+            }
         }
     }
 }
