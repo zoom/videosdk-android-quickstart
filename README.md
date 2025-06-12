@@ -23,4 +23,4 @@ The request query parameters and body structure can be edited to match your serv
 ## Usage
 After building the app and entering either a JWTToken or Endpoint URL, you can start the Sample App!  
 
-<img width="755" alt="Image" src="https://github.com/user-attachments/assets/4ba622e9-2bde-45f9-bdfe-bbb2f8a288f3" />
+<img width="755" alt="Image" src="https://github.com/user-attachments/assets/d49a4c37-60d3-471a-b3e4-0b6a13947c41" />
