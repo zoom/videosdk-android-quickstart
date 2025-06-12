@@ -12,12 +12,12 @@ $ git clone https://github.com/zoom/VideoSDK-Android-Quickstart.git
 
 Once cloned, open Android Studio and build your project.
 
-In the `.env` file found in `app/src/main/assets`, you can either enter a JWTToken retrieved from your local environment or enter an Endpoint URL to a server of your choice, which the app will use to query for a JWTToken. 
+In the `.env` file found in `app/src/main/assets`, you can either enter a [generated JWTToken](https://developers.zoom.us/docs/video-sdk/auth/) or enter an Endpoint URL of a server of your choice, which the app will use to query for a JWTToken. 
 
 > :warning: **Do not store credentials in plain text on production environments**
 
 ## Configuration
-The request query parameters and body structure can be edited to match your servers requirements in the `ApiService.kt` file. The current request structure is as follows:
+If you use the apps APIClient, the request query parameters and body structure can be edited to match your servers requirements in the `ApiService.kt` file. The current request structure is as follows:
 ```
 curl --location --request POST 'http://ENDPOINT_URL/zoomtoken?token=&name=&password=' \
 --header 'Content-Type: application/json' \
