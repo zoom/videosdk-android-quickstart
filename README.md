@@ -12,13 +12,13 @@ $ git clone https://github.com/zoom/VideoSDK-Android-Quickstart.git
 
 Once cloned, open Android Studio and build your project.
 
-In the .env file found in app/src/main/assets, you can either enter a JWTToken retrieved from your local environment or enter an Endpoint URL to a server of your choice, which the app will use to query for a JWTToken. 
+In the `.env` file found in `app/src/main/assets`, you can either enter a JWTToken retrieved from your local environment or enter an Endpoint URL to a server of your choice, which the app will use to query for a JWTToken. 
 
 ## Configuration
-The request query parameters and body structure can be edited to match your servers requirements in the ApiService.kt file.  
+The request query parameters and body structure can be edited to match your servers requirements in the `ApiService.kt` file.  
 
 
 ## Usage
 After building the app and entering either a JWTToken or Endpoint URL, you can start the Sample App!  
 
-<img width="755" alt="Image" src="https://github.com/user-attachments/assets/37d4ff2a-5c39-41da-a7a4-36eb0086f93c" />
+<img width="755" alt="Image" src="https://github.com/user-attachments/assets/4ba622e9-2bde-45f9-bdfe-bbb2f8a288f3" />
