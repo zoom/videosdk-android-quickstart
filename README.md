@@ -1,3 +1,5 @@
+# Video SDK Android Quickstart 
+
 This is a Sample App of the Android Zoom Video SDK using Jetpack Compose. Compose is a popular, modern UI toolkit from Android for building native Android UIs with Kotlin. With the use of this app, developers can quickly start
 their Zoom Video SDK projects, integrate the SDK into their projects, or use as reference for best coding practices for our Android Video SDK. 
 
