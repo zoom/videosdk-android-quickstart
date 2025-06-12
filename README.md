@@ -14,6 +14,8 @@ Once cloned, open Android Studio and build your project.
 
 In the `.env` file found in `app/src/main/assets`, you can either enter a JWTToken retrieved from your local environment or enter an Endpoint URL to a server of your choice, which the app will use to query for a JWTToken. 
 
+> :warning: **Do not store credentials in plain text on production environments**
+
 ## Configuration
 The request query parameters and body structure can be edited to match your servers requirements in the `ApiService.kt` file.  
 
