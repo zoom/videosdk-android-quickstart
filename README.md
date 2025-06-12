@@ -17,8 +17,25 @@ In the `.env` file found in `app/src/main/assets`, you can either enter a JWTTok
 > :warning: **Do not store credentials in plain text on production environments**
 
 ## Configuration
-The request query parameters and body structure can be edited to match your servers requirements in the `ApiService.kt` file.  
-
+The request query parameters and body structure can be edited to match your servers requirements in the `ApiService.kt` file. The current request structure is as follows:
+```
+curl --location --request POST 'http://ENDPOINT_URL/zoomtoken?token=&name=&password=' \
+--header 'Content-Type: application/json' \
+--data '{                        
+    "body": {                    
+        "sessionName" = "",
+        "role" = 0,
+        "userIdentity" = "",
+        "sessionkey" = "",
+        "geo_regions" = "",
+        "cloud_recording_option" = 0,
+        "cloud_recording_election" = 0,
+        "telemetry_tracking_id" = "",
+        "video_webrtc_mode" = 0,
+        "audio_webrtc_mode" = 0
+    }
+}'
+```
 
 ## Usage
 After building the app and entering either a JWTToken or Endpoint URL, you can start the Sample App!  
