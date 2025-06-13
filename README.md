@@ -12,9 +12,11 @@ Clone this repo into your local enviroment:
 $ git clone https://github.com/zoom/VideoSDK-Android-Quickstart.git
 ```
 
-Once cloned, open Android Studio and build your project.
+Once cloned, navigate to the 'videoSDK-android-quickstart' directory
 
-In the `.env` file found in `app/src/main/assets`, you can either enter a [generated JWTToken](https://developers.zoom.us/docs/video-sdk/auth/) or enter an Endpoint URL of a server of your choice, which the app will use to query for a JWTToken. 
+You can use the `studio .` command to open it in Android Studio.
+
+In the `env-sample` file found in `app/src/main/assets`, you can either enter a [generated JWTToken](https://developers.zoom.us/docs/video-sdk/auth/) or enter an Endpoint URL of a server of your choice, which the app will use to query for a JWTToken. Once your data is enter rename this file to `env`. 
 
 > :warning: **Do not store credentials in plain text on production environments**
 
@@ -40,6 +42,6 @@ curl --location --request POST 'http://ENDPOINT_URL/zoomtoken?token=&name=&passw
 ```
 
 ## Usage
-After building the app and entering either a JWTToken or Endpoint URL, you can start the Sample App!  
+After entering either a JWTToken or Endpoint URL and configuring your Endpoint,  you can start the Sample App by clicking Build and Run! 
 
 <img width="755" alt="Image" src="https://github.com/user-attachments/assets/d49a4c37-60d3-471a-b3e4-0b6a13947c41" />
