@@ -69,5 +69,11 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation("io.github.cdimascio:dotenv-kotlin:6.5.1")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    api("io.jsonwebtoken:jjwt-api:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.12.6") {
+        exclude("group:org.json", "module:json")
+     }
 
 }

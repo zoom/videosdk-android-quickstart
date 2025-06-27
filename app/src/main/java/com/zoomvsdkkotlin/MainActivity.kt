@@ -15,6 +15,7 @@ import com.zoomvsdkkotlin.activities.JoinSession
 import com.zoomvsdkkotlin.utils.Routes
 import com.zoomvsdkkotlin.viewmodel.ZoomSessionViewModel
 
+/* Disclaimer: JWT should be generated from your server */
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
