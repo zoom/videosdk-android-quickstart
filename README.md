@@ -12,7 +12,7 @@ Clone this repo into your local enviroment:
 $ git clone https://github.com/zoom/VideoSDK-Android-Quickstart.git
 ```
 
-Once cloned, navigate to the 'videoSDK-android-quickstart' directory
+Once cloned, navigate to the 'videosdk-android-quickstart' directory
 
 You can use the `studio .` command to open it in Android Studio.
 
