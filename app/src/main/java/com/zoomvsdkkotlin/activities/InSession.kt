@@ -109,28 +109,29 @@ fun InSession(navController: NavController, zoomSessionViewModel: ZoomSessionVie
                 currentUsersInView = currentUsersInView,
                 currentUsersInViewCount = zoomSessionUIState.currentUsersInViewCount,
                 participantVideoOn = zoomSessionUIState.participantVideoOn,
+                participantMuted = zoomSessionUIState.participantMuted,
                 renderView = renderView
             )
         }
 
-            Controls(
-                user = user,
-                visible = visible,
-                sessionName = zoomSessionUIState.sessionName,
-                muted = zoomSessionUIState.muted,
-                audioConnected = zoomSessionUIState.audioConnected,
-                isVideoOn = zoomSessionUIState.isVideoOn,
-                page = zoomSessionUIState.pageNumber,
-                maxPages = zoomSessionUIState.maxPages,
-                setVisible = { visible = !visible },
-                updateUsersInView = updateUsersInView,
-                microphonePermission = microphonePermission,
-                cameraPermission = cameraPermission,
-                toggleMicrophone = toggleMicrophone,
-                toggleCamera = toggleCamera,
-                closeSession = closeSession,
-                launchMultiplePermissionRequest = launchMultiplePermissionRequest,
-                navigate = navigate,
+        Controls(
+            user = user,
+            visible = visible,
+            sessionName = zoomSessionUIState.sessionName,
+            muted = zoomSessionUIState.muted,
+            audioConnected = zoomSessionUIState.audioConnected,
+            isVideoOn = zoomSessionUIState.isVideoOn,
+            page = zoomSessionUIState.pageNumber,
+            maxPages = zoomSessionUIState.maxPages,
+            setVisible = { visible = !visible },
+            updateUsersInView = updateUsersInView,
+            microphonePermission = microphonePermission,
+            cameraPermission = cameraPermission,
+            toggleMicrophone = toggleMicrophone,
+            toggleCamera = toggleCamera,
+            closeSession = closeSession,
+            launchMultiplePermissionRequest = launchMultiplePermissionRequest,
+            navigate = navigate,
         )
     }
 
@@ -138,6 +139,7 @@ fun InSession(navController: NavController, zoomSessionViewModel: ZoomSessionVie
         DraggableSelfView(
             user = user,
             isVideoOn = zoomSessionUIState.isVideoOn,
+            muted = zoomSessionUIState.muted,
             renderView = renderView,
             rotateVideo = rotateVideo
         )

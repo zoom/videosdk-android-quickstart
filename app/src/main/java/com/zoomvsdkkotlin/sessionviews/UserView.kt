@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +28,7 @@ fun UserView(
     renderView: (ZoomVideoSDKUser,ZoomVideoSDKVideoView) -> Unit,
     id: Int,
     participantVideoOn: Boolean,
+    participantMuted: Boolean
 ) {
     Box(
         modifier = modifier,
@@ -70,5 +73,19 @@ fun UserView(
                 )
             }
         }
+
+        Nametag(
+            modifier = Modifier
+                .padding(5.dp, 0.dp, 0.dp, 5.dp)
+                .sizeIn(maxWidth = 200.dp)
+                .background(
+                    color = Color.DarkGray.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(0.dp, 0.dp, 6.dp, 0.dp)
+                .align(Alignment.BottomStart),
+            username = user(id).userName,
+            muted = participantMuted
+        )
     }
 }

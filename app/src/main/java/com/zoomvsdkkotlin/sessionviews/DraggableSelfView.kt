@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -37,6 +39,7 @@ import kotlin.math.roundToInt
 fun DraggableSelfView(
     user: () -> ZoomVideoSDKUser,
     isVideoOn: Boolean,
+    muted: Boolean,
     renderView: (ZoomVideoSDKUser, ZoomVideoSDKVideoView) -> Unit,
     rotateVideo: (Int) -> Unit
 ) {
@@ -110,6 +113,20 @@ fun DraggableSelfView(
                     )
                 }
             }
+
+            Nametag(
+                modifier = Modifier
+                    .sizeIn(maxWidth = 120.dp)
+                    .padding(5.dp, 0.dp, 0.dp, 5.dp)
+                    .background(
+                        color = Color.DarkGray.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .padding(0.dp, 0.dp, 6.dp, 0.dp)
+                    .align(Alignment.BottomStart),
+                username = user().userName,
+                muted = muted
+            )
         }
     }
 }

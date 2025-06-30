@@ -49,11 +49,8 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
     val listener = object : ZoomVideoSDKDelegate {
         override fun onSessionJoin() {
             pp("onSessionJoin")
-            val sdkSession: ZoomVideoSDKSession = ZoomVideoSDK.getInstance().session
-            val remoteUsers: List<ZoomVideoSDKUser> = sdkSession.remoteUsers
             val state = zoomViewModel.getState()
 
-//            if (remoteUsers.size < 5)
             zoomViewModel.updateUsersInView(state.pageNumber)
 
             zoomViewModel.stopVideo()

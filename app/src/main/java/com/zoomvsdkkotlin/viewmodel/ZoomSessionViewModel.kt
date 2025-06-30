@@ -35,7 +35,8 @@ data class ZoomSessionUIState(
     val audioConnected: Boolean = false,
     val pageNumber: Int = 1,
     val maxPages: Int = 1,
-    val participantVideoOn: List<Boolean> = listOf(false, false, false, false)
+    val participantVideoOn: List<Boolean> = listOf(false, false, false, false),
+    val participantMuted: List<Boolean> = listOf(false, false, false, false)
 )
 
 class ZoomSessionViewModel(application: Application): AndroidViewModel(application) {
@@ -102,7 +103,8 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
                 muted = false,
                 audioConnected = false,
                 pageNumber = 1,
-                participantVideoOn = listOf(false, false, false, false)
+                participantVideoOn = listOf(false, false, false, false),
+                participantMuted = listOf(false, false, false, false)
             )
         }
         this.currentUsersInView = emptyList()
@@ -179,6 +181,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
         val userList = ZoomVideoSDK.getInstance().session.remoteUsers
         val newState = ArrayList<ZoomVideoSDKUser>()
         val newParticipantVideoOn = ArrayList<Boolean>()
+        val newParticipantMuted = ArrayList<Boolean>()
         val start: Int = (page - 1) * 4
         val size: Int = userList.size
 
@@ -187,6 +190,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
                if (start + i < size) {
                    newState.add(userList[start + i])
                    newParticipantVideoOn.add(userList[start + i].videoCanvas.videoStatus.isOn)
+                   newParticipantMuted.add(userList[start + i].audioStatus.isMuted)
                }
                else break
             }
@@ -204,6 +208,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
             pageNumber = page,
             maxPages = ceil((size.toDouble() / 4)).toInt(),
             participantVideoOn = newParticipantVideoOn.toList(),
+            participantMuted = newParticipantMuted.toList()
         )}
     }
     fun renderView(user: ZoomVideoSDKUser, view: ZoomVideoSDKVideoView) {

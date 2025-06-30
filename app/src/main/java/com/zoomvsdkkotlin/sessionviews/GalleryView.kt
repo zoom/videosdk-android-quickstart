@@ -26,7 +26,8 @@ fun GalleryView(
     currentUsersInView: () -> List<ZoomVideoSDKUser>,
     currentUsersInViewCount: Int,
     renderView: (ZoomVideoSDKUser,ZoomVideoSDKVideoView) -> Unit,
-    participantVideoOn: List<Boolean>
+    participantVideoOn: List<Boolean>,
+    participantMuted: List<Boolean>
 ) {
     val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
     val getUser = remember(currentUsersInView) {{ i: Int  ->  currentUsersInView()[i] }}
@@ -54,7 +55,8 @@ fun GalleryView(
                             user = getUser,
                             renderView = renderView,
                             id = 0,
-                            participantVideoOn = participantVideoOn[0]
+                            participantVideoOn = participantVideoOn[0],
+                            participantMuted = participantMuted[0]
                         )
                     }
 
@@ -66,7 +68,8 @@ fun GalleryView(
                             user = getUser,
                             renderView = renderView,
                             id = 1,
-                            participantVideoOn = participantVideoOn[1]
+                            participantVideoOn = participantVideoOn[1],
+                            participantMuted = participantMuted[1]
                         )
                     }
                 }
@@ -81,7 +84,8 @@ fun GalleryView(
                             user = getUser,
                             renderView = renderView,
                             id = 2,
-                            participantVideoOn = participantVideoOn[2]
+                            participantVideoOn = participantVideoOn[2],
+                            participantMuted = participantMuted[2]
                         )
                     }
 
@@ -93,7 +97,8 @@ fun GalleryView(
                             user = getUser,
                             renderView = renderView,
                             id = 3,
-                            participantVideoOn = participantVideoOn[3]
+                            participantVideoOn = participantVideoOn[3],
+                            participantMuted = participantMuted[3]
                         )
                     }
                 }
@@ -116,7 +121,8 @@ fun GalleryView(
                         user = getUser,
                         renderView = renderView,
                         id = 0,
-                        participantVideoOn = participantVideoOn[0]
+                        participantVideoOn = participantVideoOn[0],
+                        participantMuted = participantMuted[0]
                     )
                 }
                 if (currentUsersInViewCount > 1) {
@@ -128,7 +134,8 @@ fun GalleryView(
                         user = getUser,
                         renderView = renderView,
                         id = 1,
-                        participantVideoOn = participantVideoOn[1]
+                        participantVideoOn = participantVideoOn[1],
+                        participantMuted = participantMuted[1]
                     )
                 }
                 if (currentUsersInViewCount > 2) {
@@ -140,7 +147,8 @@ fun GalleryView(
                         user = getUser,
                         renderView = renderView,
                         id = 2,
-                        participantVideoOn = participantVideoOn[2]
+                        participantVideoOn = participantVideoOn[2],
+                        participantMuted = participantMuted[2]
                     )
                 }
                 if (currentUsersInViewCount > 3) {
@@ -152,7 +160,8 @@ fun GalleryView(
                         user = getUser,
                         renderView = renderView,
                         id = 3,
-                        participantVideoOn = participantVideoOn[3]
+                        participantVideoOn = participantVideoOn[3],
+                        participantMuted = participantMuted[3]
                     )
                 }
             }
