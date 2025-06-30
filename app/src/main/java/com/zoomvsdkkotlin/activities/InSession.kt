@@ -66,6 +66,9 @@ fun InSession(navController: NavController, zoomSessionViewModel: ZoomSessionVie
     val toggleMicrophone = remember(zoomSessionViewModel) {{
         zoomSessionViewModel.toggleMicrophone()
     }}
+    val updateUsersInView = remember(zoomSessionViewModel) {{
+            page: Int -> zoomSessionViewModel.updateUsersInView(page)
+    }}
     val closeSession = remember(zoomSessionViewModel) {{
         end: Boolean -> zoomSessionViewModel.closeSession(end)
     }}
@@ -105,28 +108,29 @@ fun InSession(navController: NavController, zoomSessionViewModel: ZoomSessionVie
             GalleryView(
                 currentUsersInView = currentUsersInView,
                 currentUsersInViewCount = zoomSessionUIState.currentUsersInViewCount,
-                participantVideoOn1 = zoomSessionUIState.participantVideoOn1,
-                participantVideoOn2 = zoomSessionUIState.participantVideoOn2,
-                participantVideoOn3 = zoomSessionUIState.participantVideoOn3,
+                participantVideoOn = zoomSessionUIState.participantVideoOn,
                 renderView = renderView
             )
         }
 
-        Controls(
-            user = user,
-            visible = visible,
-            sessionName = zoomSessionUIState.sessionName,
-            muted = zoomSessionUIState.muted,
-            audioConnected = zoomSessionUIState.audioConnected,
-            isVideoOn = zoomSessionUIState.isVideoOn,
-            setVisible = { visible = !visible },
-            microphonePermission = microphonePermission,
-            cameraPermission = cameraPermission,
-            toggleMicrophone = toggleMicrophone,
-            toggleCamera = toggleCamera,
-            closeSession = closeSession,
-            launchMultiplePermissionRequest = launchMultiplePermissionRequest,
-            navigate = navigate,
+            Controls(
+                user = user,
+                visible = visible,
+                sessionName = zoomSessionUIState.sessionName,
+                muted = zoomSessionUIState.muted,
+                audioConnected = zoomSessionUIState.audioConnected,
+                isVideoOn = zoomSessionUIState.isVideoOn,
+                page = zoomSessionUIState.pageNumber,
+                maxPages = zoomSessionUIState.maxPages,
+                setVisible = { visible = !visible },
+                updateUsersInView = updateUsersInView,
+                microphonePermission = microphonePermission,
+                cameraPermission = cameraPermission,
+                toggleMicrophone = toggleMicrophone,
+                toggleCamera = toggleCamera,
+                closeSession = closeSession,
+                launchMultiplePermissionRequest = launchMultiplePermissionRequest,
+                navigate = navigate,
         )
     }
 

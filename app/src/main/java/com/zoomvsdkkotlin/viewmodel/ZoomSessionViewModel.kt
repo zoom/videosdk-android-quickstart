@@ -21,6 +21,7 @@ import us.zoom.sdk.ZoomVideoSDKVideoAspect
 import us.zoom.sdk.ZoomVideoSDKVideoCanvas
 import us.zoom.sdk.ZoomVideoSDKVideoResolution
 import us.zoom.sdk.ZoomVideoSDKVideoView
+import kotlin.math.ceil
 
 data class ZoomSessionUIState(
     val selfView: ZoomVideoSDKVideoView? = null,
@@ -33,9 +34,8 @@ data class ZoomSessionUIState(
     val muted: Boolean = false,
     val audioConnected: Boolean = false,
     val pageNumber: Int = 1,
-    val participantVideoOn1: Boolean = false,
-    val participantVideoOn2: Boolean = false,
-    val participantVideoOn3: Boolean = false
+    val maxPages: Int = 1,
+    val participantVideoOn: List<Boolean> = listOf(false, false, false, false)
 )
 
 class ZoomSessionViewModel(application: Application): AndroidViewModel(application) {
@@ -102,9 +102,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
                 muted = false,
                 audioConnected = false,
                 pageNumber = 1,
-                participantVideoOn1 = false,
-                participantVideoOn2 = false,
-                participantVideoOn3 = false
+                participantVideoOn = listOf(false, false, false, false)
             )
         }
         this.currentUsersInView = emptyList()
@@ -180,13 +178,18 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
     fun updateUsersInView(page: Int) {
         val userList = ZoomVideoSDK.getInstance().session.remoteUsers
         val newState = ArrayList<ZoomVideoSDKUser>()
-        val start: Int = (page - 1) * 3
+        val newParticipantVideoOn = ArrayList<Boolean>()
+        val start: Int = (page - 1) * 4
         val size: Int = userList.size
 
         if (userList.isNotEmpty()) {
-            newState.add(userList[start])
-            if (size > 1) newState.add(userList[start + 1])
-            if (size > 2) newState.add(userList[start + 2])
+            for (i in 0..3) {
+               if (start + i < size) {
+                   newState.add(userList[start + i])
+                   newParticipantVideoOn.add(userList[start + i].videoCanvas.videoStatus.isOn)
+               }
+               else break
+            }
             this.currentUsersInView = newState.toList()
             _zoomSessionUIState.update {
                 it.copy( currentUsersInViewCount = this.currentUsersInView.size)
@@ -197,7 +200,11 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
                 it.copy( currentUsersInViewCount = 0)
             }
         }
-        _zoomSessionUIState.update { it.copy( pageNumber = page) }
+        _zoomSessionUIState.update { it.copy(
+            pageNumber = page,
+            maxPages = ceil((size.toDouble() / 4)).toInt(),
+            participantVideoOn = newParticipantVideoOn.toList(),
+        )}
     }
     fun renderView(user: ZoomVideoSDKUser, view: ZoomVideoSDKVideoView) {
         val canvas: ZoomVideoSDKVideoCanvas = user.videoCanvas
@@ -207,7 +214,6 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
             ZoomVideoSDKVideoResolution.VideoResolution_720P
         )
     }
-
     fun stopRenderSelfView(user: ZoomVideoSDKUser) {
         val canvas: ZoomVideoSDKVideoCanvas = user.videoCanvas
         canvas.unSubscribe(_zoomSessionUIState.value.selfView)

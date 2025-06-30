@@ -18,6 +18,7 @@ prettyPrint = "2.0.8"
 retrofit = "2.10.0"
 zoomvideosdkCore = "2.1.13"
 zoomvideosdkVideoeffects = "2.1.13"
+constraintlayout = "2.2.1"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -46,6 +47,7 @@ pretty-print = { module = "com.tylerthrailkill.helpers:pretty-print", name = "pr
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 zoomvideosdk-core = { module = "us.zoom.videosdk:zoomvideosdk-core", version.ref = "zoomvideosdkCore" }
 zoomvideosdk-videoeffects = { module = "us.zoom.videosdk:zoomvideosdk-videoeffects", version.ref = "zoomvideosdkVideoeffects" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

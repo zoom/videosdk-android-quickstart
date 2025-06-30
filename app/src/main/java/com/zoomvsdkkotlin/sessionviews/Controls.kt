@@ -35,6 +35,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.zoomvsdkkotlin.R
 import us.zoom.sdk.ZoomVideoSDKUser
@@ -61,7 +62,10 @@ fun Controls(
     muted: Boolean,
     audioConnected: Boolean,
     isVideoOn: Boolean,
+    page: Int,
+    maxPages: Int,
     setVisible: () -> Unit,
+    updateUsersInView: (Int) -> Unit,
     cameraPermission: () -> Boolean,
     microphonePermission: () -> Boolean,
     launchMultiplePermissionRequest: () -> Unit,
@@ -82,7 +86,8 @@ fun Controls(
                 enabled = true,
                 interactionSource = interactionSource,
                 indication = null,
-                onClick = setVisible),
+                onClick = setVisible
+            ),
     ) {
         AnimatedVisibility(
             visible = visible,
@@ -102,7 +107,8 @@ fun Controls(
             ) {
                 Text(
                     text = sessionName,
-                    color = Color.White)
+                    color = Color.White
+                )
             }
         }
         AnimatedVisibility(
@@ -114,104 +120,157 @@ fun Controls(
                 .align(Alignment.BottomCenter)
                 .offset(0.dp, (-50).dp),
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                //Audio
-                IconButton(
-                    onClick = {
-                        if (!microphonePermission()) {
-                            launchMultiplePermissionRequest()
-                        } else {
-                            toggleMicrophone()
-                        }
-                    },
+            ConstraintLayout {
+                val (controls, leftChevron, rightChevron) = createRefs()
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
-                        .then(Modifier.size(75.dp))
-                        .clip(CircleShape)
-                        .background(Color.Blue)
+                        .fillMaxWidth()
+                        .constrainAs(controls) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
                 ) {
-                    if (microphonePermission()){
-                        if (audioConnected) {
-                            if (muted) {
-                                Icon(
-                                    painter = painterResource(R.drawable.mic_off_24px),
-                                    tint = Color.White,
-                                    contentDescription = null
-                                )
+                    //Audio
+                    IconButton(
+                        onClick = {
+                            if (!microphonePermission()) {
+                                launchMultiplePermissionRequest()
+                            } else {
+                                toggleMicrophone()
+                            }
+                        },
+                        modifier = Modifier
+                            .then(Modifier.size(75.dp))
+                            .clip(CircleShape)
+                            .background(Color.Blue)
+                    ) {
+                        if (microphonePermission()) {
+                            if (audioConnected) {
+                                if (muted) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.mic_off_24px),
+                                        tint = Color.White,
+                                        contentDescription = null
+                                    )
+                                } else {
+                                    Icon(
+                                        painter = painterResource(R.drawable.mic_24px),
+                                        tint = Color.White,
+                                        contentDescription = null
+                                    )
+                                }
                             } else {
                                 Icon(
-                                    painter = painterResource(R.drawable.mic_24px),
+                                    painter = painterResource(R.drawable.headset_mic_24px),
                                     tint = Color.White,
                                     contentDescription = null
                                 )
                             }
                         } else {
                             Icon(
-                                painter = painterResource(R.drawable.headset_mic_24px),
+                                painter = painterResource(R.drawable.mic_alert_24px),
                                 tint = Color.White,
                                 contentDescription = null
                             )
                         }
-                    } else {
+                    }
+
+                    //Video
+                    IconButton(
+                        onClick = {
+                            if (!cameraPermission()) {
+                                launchMultiplePermissionRequest()
+                            } else {
+                                toggleCamera()
+                            }
+                        },
+                        modifier = Modifier
+                            .then(Modifier.size(75.dp))
+                            .clip(CircleShape)
+                            .background(Color.Blue)
+                    ) {
+                        if (cameraPermission()) {
+                            if (isVideoOn) {
+                                Icon(
+                                    painter = painterResource(R.drawable.videocam_24px),
+                                    tint = Color.White,
+                                    contentDescription = null
+                                )
+                            } else {
+                                Icon(
+                                    painter = painterResource(R.drawable.videocam_off_24px),
+                                    tint = Color.White,
+                                    contentDescription = null
+                                )
+                            }
+                        } else {
+                            Icon(
+                                painter = painterResource(R.drawable.videocam_alert_24px),
+                                tint = Color.White,
+                                contentDescription = null
+                            )
+                        }
+                    }
+
+                    //Leave/End Session
+                    IconButton(
+                        onClick = { showLeave = !showLeave },
+                        modifier = Modifier
+                            .then(Modifier.size(75.dp))
+                            .clip(CircleShape)
+                            .background(Color.Red)
+                    ) {
                         Icon(
-                            painter = painterResource(R.drawable.mic_alert_24px),
+                            Icons.Default.Clear,
                             tint = Color.White,
                             contentDescription = null
                         )
                     }
                 }
 
-                //Video
-                IconButton(
-                    onClick = {
-                        if (!cameraPermission()) {
-                            launchMultiplePermissionRequest()
-                        } else {
-                            toggleCamera()
-                        }
-                    },
-                    modifier = Modifier
-                        .then(Modifier.size(75.dp))
-                        .clip(CircleShape)
-                        .background(Color.Blue)
-                ) {
-                    if (cameraPermission()){
-                        if (isVideoOn) {
-                            Icon(
-                                painter = painterResource(R.drawable.videocam_24px),
-                                tint = Color.White,
-                                contentDescription = null
-                            )
-                        } else {
-                            Icon(
-                                painter = painterResource(R.drawable.videocam_off_24px),
-                                tint = Color.White,
-                                contentDescription = null
-                            )
-                        }
-                    } else {
+                //Pagination
+                if (maxPages > 1 && page != 1) {
+                    IconButton(
+                        onClick = {
+                            updateUsersInView(page - 1)
+                        },
+                        modifier = Modifier
+                            .then(Modifier.size(30.dp))
+                            .clip(CircleShape)
+                            .background(Color.DarkGray)
+                            .constrainAs(leftChevron) {
+                                bottom.linkTo(controls.top, margin = 25.dp)
+                                start.linkTo(controls.start, margin = 30.dp)
+                            }
+                    ) {
                         Icon(
-                            painter = painterResource(R.drawable.videocam_alert_24px),
+                            painter = painterResource(R.drawable.chevron_backward_24px),
                             tint = Color.White,
                             contentDescription = null
                         )
                     }
                 }
-
-                //Leave/End Session
-                IconButton(
-                    onClick = { showLeave = !showLeave },
-                    modifier = Modifier
-                        .then(Modifier.size(75.dp))
-                        .clip(CircleShape)
-                        .background(Color.Red)
-                ) {
-                    Icon(
-                        Icons.Default.Clear,
-                        tint = Color.White,
-                        contentDescription = null
-                    )
+                if ( maxPages > 1 && maxPages != page) {
+                    IconButton(
+                        onClick = {
+                            updateUsersInView(page + 1)
+                        },
+                        modifier = Modifier
+                            .then(Modifier.size(30.dp))
+                            .clip(CircleShape)
+                            .background(Color.DarkGray)
+                            .constrainAs(rightChevron) {
+                                bottom.linkTo(controls.top, margin = 25.dp)
+                                end.linkTo(controls.end, margin = 30.dp)
+                            }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.chevron_forward_24px),
+                            tint = Color.White,
+                            contentDescription = null
+                        )
+                    }
                 }
             }
         }

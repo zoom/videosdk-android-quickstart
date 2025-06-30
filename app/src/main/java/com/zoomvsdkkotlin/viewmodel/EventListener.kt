@@ -53,8 +53,8 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             val remoteUsers: List<ZoomVideoSDKUser> = sdkSession.remoteUsers
             val state = zoomViewModel.getState()
 
-            if (remoteUsers.size < 4)
-                zoomViewModel.updateUsersInView(1)
+//            if (remoteUsers.size < 5)
+            zoomViewModel.updateUsersInView(state.pageNumber)
 
             zoomViewModel.stopVideo()
             zoomViewModel.updateState( state.copy(sessionLoader = false))
@@ -113,27 +113,11 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             userList: MutableList<ZoomVideoSDKUser>?
         ) {
             pp("onUserVideoStatusChanged")
-
             val state = zoomViewModel.getState()
-            val currentUsersInView: List<ZoomVideoSDKUser> = zoomViewModel.getCurrentUsersInView()
             val user: ZoomVideoSDKUser = zoomViewModel.getMyself()
 
-            if (userList?.get(0)?.userID != user.userID) {
-                val size: Int = currentUsersInView.size
-
-                val participantVideoOn1: Boolean =
-                    (size > 0) && currentUsersInView[0].videoCanvas.videoStatus.isOn
-                val participantVideoOn2: Boolean =
-                    (size > 1) && currentUsersInView[1].videoCanvas.videoStatus.isOn
-                val participantVideoOn3: Boolean =
-                    (size > 2) && currentUsersInView[2].videoCanvas.videoStatus.isOn
-
-                zoomViewModel.updateState( state.copy(
-                    participantVideoOn1 = participantVideoOn1,
-                    participantVideoOn2 = participantVideoOn2,
-                    participantVideoOn3 = participantVideoOn3
-                ))
-            }
+            if (userList?.get(0)?.userID != user.userID)
+                zoomViewModel.updateUsersInView(state.pageNumber)
         }
 
         override fun onUserAudioStatusChanged(

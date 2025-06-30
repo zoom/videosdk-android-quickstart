@@ -31,7 +31,7 @@ public class TokenGenerator {
         claims.put("iat", Date.from(Instant.now()));
         claims.put("exp", Date.from(now.plus(5, ChronoUnit.MINUTES)));
         claims.put("user_identity", jwtOptions.getUserIdentity());
-        claims.put("session_key", jwtOptions.getSessionkey());
+//        claims.put("session_key", jwtOptions.getSessionkey());
         claims.put("geo_regions", jwtOptions.getGeo_regions());
         claims.put("cloud_recording_option", jwtOptions.getCloud_recording_option());
         claims.put("cloud_recording_election", jwtOptions.getCloud_recording_election());

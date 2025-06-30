@@ -26,9 +26,7 @@ fun GalleryView(
     currentUsersInView: () -> List<ZoomVideoSDKUser>,
     currentUsersInViewCount: Int,
     renderView: (ZoomVideoSDKUser,ZoomVideoSDKVideoView) -> Unit,
-    participantVideoOn1: Boolean,
-    participantVideoOn2: Boolean,
-    participantVideoOn3: Boolean
+    participantVideoOn: List<Boolean>
 ) {
     val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
     val getUser = remember(currentUsersInView) {{ i: Int  ->  currentUsersInView()[i] }}
@@ -56,7 +54,7 @@ fun GalleryView(
                             user = getUser,
                             renderView = renderView,
                             id = 0,
-                            participantVideoOn = participantVideoOn1
+                            participantVideoOn = participantVideoOn[0]
                         )
                     }
 
@@ -68,20 +66,36 @@ fun GalleryView(
                             user = getUser,
                             renderView = renderView,
                             id = 1,
-                            participantVideoOn = participantVideoOn2
+                            participantVideoOn = participantVideoOn[1]
                         )
                     }
                 }
-                if (currentUsersInViewCount > 2) {
-                    UserView(
-                        modifier = Modifier
-                            .size(width)
-                            .padding(horizontal = 5.dp, vertical = 10.dp),
-                        user = getUser,
-                        renderView = renderView,
-                        id = 2,
-                        participantVideoOn = participantVideoOn3
-                    )
+                Row(
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    if (currentUsersInViewCount > 2) {
+                        UserView(
+                            modifier = Modifier
+                                .size(width)
+                                .padding(horizontal = 5.dp, vertical = 10.dp),
+                            user = getUser,
+                            renderView = renderView,
+                            id = 2,
+                            participantVideoOn = participantVideoOn[2]
+                        )
+                    }
+
+                    if (currentUsersInViewCount > 3) {
+                        UserView(
+                            modifier = Modifier
+                                .size(width)
+                                .padding(horizontal = 5.dp, vertical = 10.dp),
+                            user = getUser,
+                            renderView = renderView,
+                            id = 3,
+                            participantVideoOn = participantVideoOn[3]
+                        )
+                    }
                 }
             }
         } else {
@@ -91,7 +105,7 @@ fun GalleryView(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val width = if (currentUsersInViewCount > 2) boxWidth / 3 else boxWidth / 2
+                val width = boxWidth / currentUsersInViewCount
 
                 if (currentUsersInViewCount > 0) {
                     UserView(
@@ -102,7 +116,7 @@ fun GalleryView(
                         user = getUser,
                         renderView = renderView,
                         id = 0,
-                        participantVideoOn = participantVideoOn1
+                        participantVideoOn = participantVideoOn[0]
                     )
                 }
                 if (currentUsersInViewCount > 1) {
@@ -114,7 +128,7 @@ fun GalleryView(
                         user = getUser,
                         renderView = renderView,
                         id = 1,
-                        participantVideoOn = participantVideoOn2
+                        participantVideoOn = participantVideoOn[1]
                     )
                 }
                 if (currentUsersInViewCount > 2) {
@@ -126,7 +140,19 @@ fun GalleryView(
                         user = getUser,
                         renderView = renderView,
                         id = 2,
-                        participantVideoOn = participantVideoOn3
+                        participantVideoOn = participantVideoOn[2]
+                    )
+                }
+                if (currentUsersInViewCount > 3) {
+                    UserView(
+                        modifier = Modifier
+                            .width(width)
+                            .height(width)
+                            .padding(horizontal = 5.dp),
+                        user = getUser,
+                        renderView = renderView,
+                        id = 3,
+                        participantVideoOn = participantVideoOn[3]
                     )
                 }
             }

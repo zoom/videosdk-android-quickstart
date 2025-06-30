@@ -75,5 +75,6 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.12.6") {
         exclude("group:org.json", "module:json")
      }
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
 }
