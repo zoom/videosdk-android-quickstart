@@ -81,7 +81,6 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
             }
         }
     }
-
     fun getMyself(): ZoomVideoSDKUser {
         return ZoomVideoSDK.getInstance().session.mySelf
     }
