@@ -16,7 +16,7 @@ Once cloned, navigate to the 'videosdk-android-quickstart' directory
 
 You can use the `studio .` command to open it in Android Studio.
 
-In the `env-sample` file found in `app/src/main/assets`, you can either enter a [generated JWTToken](https://developers.zoom.us/docs/video-sdk/auth/) or enter an Endpoint URL of a server of your choice, which the app will use to query for a JWTToken. Once your data is enter rename this file to `env`. 
+In the `env-sample` file found in `app/src/main/assets`, you can either enter a enter your SDK Credentials from Marketplace to use the local Token Generator or enter an Endpoint URL of a server of your choice, which the app will use to query for a JWTToken. Once your data is entered, rename this file to `env`. 
 
 > :warning: **Do not store credentials in plain text on production environments**
 
