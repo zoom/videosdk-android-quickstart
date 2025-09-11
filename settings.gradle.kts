@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "zoom-vsdk-kotlin"
 include(":app")
-include(":mobilertc")

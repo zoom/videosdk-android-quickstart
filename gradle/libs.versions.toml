@@ -16,8 +16,7 @@ composeBom = "2024.04.01"
 navigationCompose = "2.8.9"
 prettyPrint = "2.0.8"
 retrofit = "2.10.0"
-zoomvideosdkCore = "2.3.0"
-zoomvideosdkVideoeffects = "2.3.0"
+zoomvideosdkCore = "2.3.5"
 constraintlayout = "2.2.1"
 
 [libraries]
@@ -46,7 +45,6 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 pretty-print = { module = "com.tylerthrailkill.helpers:pretty-print", name = "pretty-print", version = "v2.0.8" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 zoomvideosdk-core = { module = "us.zoom.videosdk:zoomvideosdk-core", version.ref = "zoomvideosdkCore" }
-zoomvideosdk-videoeffects = { module = "us.zoom.videosdk:zoomvideosdk-videoeffects", version.ref = "zoomvideosdkVideoeffects" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
