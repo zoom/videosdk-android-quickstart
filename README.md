@@ -5,6 +5,8 @@ their Zoom Video SDK projects, integrate the SDK into their projects, or use as 
 
 Use of this Sample App is subject to our [Terms of Use](https://www.zoom.com/en/trust/terms/).
 
+You can find the corresponding Developer Blog for this app [here](https://developers.zoom.us/blog/videosdk-android-quickstart/)
+
 ## Installation
 
 Clone this repo into your local enviroment:
