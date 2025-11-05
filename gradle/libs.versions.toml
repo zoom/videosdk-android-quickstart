@@ -16,7 +16,7 @@ composeBom = "2024.04.01"
 navigationCompose = "2.8.9"
 prettyPrint = "2.0.8"
 retrofit = "2.10.0"
-zoomvideosdkCore = "2.3.5"
+zoomvideosdkCore = "2.4.0"
 constraintlayout = "2.2.1"
 
 [libraries]
