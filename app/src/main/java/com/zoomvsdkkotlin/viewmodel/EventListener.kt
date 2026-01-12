@@ -2,6 +2,8 @@ package com.zoomvsdkkotlin.viewmodel
 
 import com.tylerthrailkill.helpers.prettyprint.pp
 import us.zoom.sdk.IncomingLiveStreamStatus
+import us.zoom.sdk.RealTimeMediaStreamsFailReason
+import us.zoom.sdk.RealTimeMediaStreamsStatus
 import us.zoom.sdk.SubSessionKit
 import us.zoom.sdk.SubSessionUserHelpRequestHandler
 import us.zoom.sdk.UVCCameraStatus
@@ -10,6 +12,7 @@ import us.zoom.sdk.ZoomVideoSDKAnnotationHelper
 import us.zoom.sdk.ZoomVideoSDKAudioHelper
 import us.zoom.sdk.ZoomVideoSDKAudioRawData
 import us.zoom.sdk.ZoomVideoSDKAudioStatus
+import us.zoom.sdk.ZoomVideoSDKBroadcastControlStatus
 import us.zoom.sdk.ZoomVideoSDKCRCCallStatus
 import us.zoom.sdk.ZoomVideoSDKCameraControlRequestHandler
 import us.zoom.sdk.ZoomVideoSDKCameraControlRequestType
@@ -17,7 +20,9 @@ import us.zoom.sdk.ZoomVideoSDKChatHelper
 import us.zoom.sdk.ZoomVideoSDKChatMessage
 import us.zoom.sdk.ZoomVideoSDKChatMessageDeleteType
 import us.zoom.sdk.ZoomVideoSDKChatPrivilegeType
+import us.zoom.sdk.ZoomVideoSDKDataType
 import us.zoom.sdk.ZoomVideoSDKDelegate
+import us.zoom.sdk.ZoomVideoSDKExportFormat
 import us.zoom.sdk.ZoomVideoSDKFileTransferStatus
 import us.zoom.sdk.ZoomVideoSDKLiveStreamHelper
 import us.zoom.sdk.ZoomVideoSDKLiveStreamStatus
@@ -40,6 +45,7 @@ import us.zoom.sdk.ZoomVideoSDKShareAction
 import us.zoom.sdk.ZoomVideoSDKShareHelper
 import us.zoom.sdk.ZoomVideoSDKShareSetting
 import us.zoom.sdk.ZoomVideoSDKShareStatus
+import us.zoom.sdk.ZoomVideoSDKStreamingJoinStatus
 import us.zoom.sdk.ZoomVideoSDKSubSessionManager
 import us.zoom.sdk.ZoomVideoSDKSubSessionParticipant
 import us.zoom.sdk.ZoomVideoSDKSubSessionStatus
@@ -51,6 +57,7 @@ import us.zoom.sdk.ZoomVideoSDKVideoCanvas
 import us.zoom.sdk.ZoomVideoSDKVideoHelper
 import us.zoom.sdk.ZoomVideoSDKVideoSubscribeFailReason
 import us.zoom.sdk.ZoomVideoSDKVideoView
+import us.zoom.sdk.ZoomVideoSDKWhiteboardHelper
 
 class EventListener(zoomViewModel: ZoomSessionViewModel) {
     val listener = object : ZoomVideoSDKDelegate {
@@ -74,6 +81,7 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
 
         override fun onError(errorCode: Int) {
             pp("onError")
+            println(errorCode)
         }
 
         override fun onUserJoin(
@@ -499,6 +507,71 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
 
         override fun onShareSettingChanged(setting: ZoomVideoSDKShareSetting?) {
             pp("onShareSettingChanged")
+        }
+
+        override fun onStartBroadcastResponse(bSuccess: Boolean, channelID: String?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onStopBroadcastResponse(bSuccess: Boolean) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onGetBroadcastControlStatus(
+            bSuccess: Boolean,
+            status: ZoomVideoSDKBroadcastControlStatus?
+        ) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onStreamingJoinStatusChanged(status: ZoomVideoSDKStreamingJoinStatus?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onUserWhiteboardShareStatusChanged(
+            user: ZoomVideoSDKUser?,
+            helper: ZoomVideoSDKWhiteboardHelper?
+        ) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onWhiteboardExported(format: ZoomVideoSDKExportFormat?, data: ByteArray?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onMyAudioSourceTypeChanged(device: ZoomVideoSDKAudioHelper.ZoomVideoSDKAudioDevice?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onUserNetworkStatusChanged(
+            type: ZoomVideoSDKDataType?,
+            level: ZoomVideoSDKNetworkStatus?,
+            user: ZoomVideoSDKUser?
+        ) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onUserOverallNetworkStatusChanged(
+            level: ZoomVideoSDKNetworkStatus?,
+            user: ZoomVideoSDKUser?
+        ) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onAudioLevelChanged(
+            level: Int,
+            audioSharing: Boolean,
+            user: ZoomVideoSDKUser?
+        ) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onRealTimeMediaStreamsStatus(status: RealTimeMediaStreamsStatus?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onRealTimeMediaStreamsFail(failReason: RealTimeMediaStreamsFailReason?) {
+            TODO("Not yet implemented")
         }
     }
 }
