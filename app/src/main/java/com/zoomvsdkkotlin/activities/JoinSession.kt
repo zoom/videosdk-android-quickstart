@@ -20,7 +20,6 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.zoomvsdkkotlin.utils.ApiClient
 import com.zoomvsdkkotlin.utils.Routes
-import com.zoomvsdkkotlin.utils.TokenGenerator
 import com.zoomvsdkkotlin.viewmodel.ZoomSessionViewModel
 import io.github.cdimascio.dotenv.dotenv
 import kotlinx.coroutines.launch
@@ -52,8 +51,8 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
 
     //place generated JWT here, if no value is provided the APIClient will be used
     //to retrieve a token from your specified Endpoint
-    val sdkKey: String = dotenv["SDK_KEY"]
-    val sdkSecret: String = dotenv["SDK_SECRET"]
+    val endpointURL: String = dotenv["ENDPOINT_URL"]
+
 
     val scope = rememberCoroutineScope()
 
@@ -65,6 +64,9 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
     }
     var password by remember {
         mutableStateOf("123")
+    }
+    var jwtToken by remember {
+        mutableStateOf("")
     }
 
     Column(
@@ -107,6 +109,17 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
             placeholder = {
                 Text("12345")
             })
+        OutlinedTextField(
+            value = jwtToken,
+            onValueChange = {
+                jwtToken = it
+            },
+            label = {
+                Text("JWT Token")
+            },
+            placeholder = {
+                Text("")
+            })
 
         Row {
             Button(onClick = {
@@ -123,10 +136,9 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
                     audio_webrtc_mode = 0
                 )
 
-                if (sdkKey.isNotEmpty() && sdkSecret.isNotEmpty()) {
-                    val signature: String = TokenGenerator.generateToken(body, sdkKey, sdkSecret)
-                    val config = Config(sessionName, userName, password, signature)
-                    println(signature)
+                if (endpointURL.isEmpty()) {
+                    println("JWT from local " + jwtToken)
+                    val config = Config(sessionName, userName, password, jwtToken)
                     zoomSessionViewModel.initZoomSDK()
                     zoomSessionViewModel.joinSession(config)
                     navController.navigate(Routes.INSESSION)
@@ -137,7 +149,7 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
                         if (response.isSuccessful) {
                             val jwt = Gson().fromJson(response.body(), Signature::class.java)
                             val config = Config(sessionName, userName, password, jwt.signature)
-                            println(jwt.signature)
+                            println("JWT from server " + jwt.signature)
 
                             zoomSessionViewModel.initZoomSDK()
                             zoomSessionViewModel.joinSession(config)
