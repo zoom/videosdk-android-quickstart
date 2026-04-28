@@ -18,12 +18,20 @@ Once cloned, navigate to the 'videosdk-android-quickstart' directory
 
 You can use the `studio .` command to open it in Android Studio.
 
-In the `env-sample` file found in `app/src/main/assets`, you can either enter a enter your SDK Credentials from Marketplace to use the local Token Generator or enter an Endpoint URL of a server of your choice, which the app will use to query for a JWTToken. Once your data is entered, rename this file to `env`. 
+In the `env-sample` file found in `app/src/main/assets`, you can choose to either enter an endpoint url to a backend server which handles JWT Token generation or you can leave the field blank and use the below steps for manually generating a token in the Android Studio terminal. Once your data is entered, rename this file to `env`. 
 
 > :warning: **Do not store credentials in plain text on production environments**
 
 ## Configuration
-If you use the apps APIClient, the request query parameters and body structure can be edited to match your servers requirements in the `ApiService.kt` file. The current request structure is as follows:
+
+For manually generating a JWT Token:
+1. Ensure you are using JDK 16+ and your project language level is set to JDK 16+
+2. In the terminal navigate to the utils folder with this command `cd app/src/main/java/com/zoomvideosdkkotlin/utils`
+3. Compile the `TokenGenerator.java` with this command: `javac -cp "lib/*"  TokenGenerator.java`
+4. Execute the file with this command with command line argument in this order: `java -cp "lib/*" TokenGenerator.java [topic] [role(0 or 1)] [sdk key] [sdk secret]`
+5. A JWT Token will output to the console. From there Build and run the application and input the JWT into the app when prompted.
+
+If you choose to use the apps APIClient, the request query parameters and body structure can be edited to match your servers requirements in the `ApiService.kt` file. The current request structure is as follows:
 ```
 curl --location --request POST 'http://ENDPOINT_URL/zoomtoken?token=&name=&password=' \
 --header 'Content-Type: application/json' \
