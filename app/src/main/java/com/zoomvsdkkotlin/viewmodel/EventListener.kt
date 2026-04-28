@@ -9,6 +9,7 @@ import us.zoom.sdk.SubSessionUserHelpRequestHandler
 import us.zoom.sdk.UVCCameraStatus
 import us.zoom.sdk.ZoomVideoSDK
 import us.zoom.sdk.ZoomVideoSDKAnnotationHelper
+import us.zoom.sdk.ZoomVideoSDKAnnotationToolType
 import us.zoom.sdk.ZoomVideoSDKAudioHelper
 import us.zoom.sdk.ZoomVideoSDKAudioRawData
 import us.zoom.sdk.ZoomVideoSDKAudioStatus
@@ -33,6 +34,7 @@ import us.zoom.sdk.ZoomVideoSDKPasswordHandler
 import us.zoom.sdk.ZoomVideoSDKPhoneFailedReason
 import us.zoom.sdk.ZoomVideoSDKPhoneStatus
 import us.zoom.sdk.ZoomVideoSDKProxySettingHandler
+import us.zoom.sdk.ZoomVideoSDKQOSStatistics
 import us.zoom.sdk.ZoomVideoSDKRawDataPipe
 import us.zoom.sdk.ZoomVideoSDKReceiveFile
 import us.zoom.sdk.ZoomVideoSDKRecordingConsentHandler
@@ -388,6 +390,14 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
             pp("onAnnotationPrivilegeChange")
         }
 
+        override fun onAnnotationToolTypeChanged(
+            helper: ZoomVideoSDKAnnotationHelper?,
+            view: ZoomVideoSDKVideoView?,
+            toolType: ZoomVideoSDKAnnotationToolType?
+        ) {
+            pp("onAnnotationToolTypeChanged")
+        }
+
         override fun onTestMicStatusChanged(status: ZoomVideoSDKTestMicStatus?) {
             pp("onTestMicStatusChanged")
         }
@@ -534,6 +544,24 @@ class EventListener(zoomViewModel: ZoomSessionViewModel) {
 
         override fun onWhiteboardExported(format: ZoomVideoSDKExportFormat?, data: ByteArray?) {
             pp("onWhiteboardExported")
+        }
+
+        override fun onCanvasSnapshotTaken(
+            user: ZoomVideoSDKUser?,
+            isShare: Boolean
+        ) {
+            pp("onCanvasSnapshotTaken")
+        }
+
+        override fun onCanvasSnapshotIncompatible(user: ZoomVideoSDKUser?) {
+            pp("onCanvasSnapshotIncompatible")
+        }
+
+        override fun onQOSStatisticsReceived(
+            statistics: ZoomVideoSDKQOSStatistics?,
+            user: ZoomVideoSDKUser?
+        ) {
+            pp("onQOSStatisticsReceived")
         }
 
         override fun onMyAudioSourceTypeChanged(device: ZoomVideoSDKAudioHelper.ZoomVideoSDKAudioDevice?) {
