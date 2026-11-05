@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -62,10 +63,16 @@ fun Controls(
     muted: Boolean,
     audioConnected: Boolean,
     isVideoOn: Boolean,
+    isHost: Boolean,
     page: Int,
     maxPages: Int,
     setVisible: () -> Unit,
     updateUsersInView: (Int) -> Unit,
+    showHostOptions: Boolean,
+    onHostOptionsDismiss: () -> Unit,
+    onParticipantsClick: () -> Unit,
+    onAdmitParticipantsClick: () -> Unit,
+    onHostOptionsClick: () -> Unit,
     cameraPermission: () -> Boolean,
     microphonePermission: () -> Boolean,
     launchMultiplePermissionRequest: () -> Unit,
@@ -101,14 +108,43 @@ fun Controls(
                 .offset(0.dp, 65.dp)
         ) {
             Row(
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .bottomBorder(Color.Gray, 5.toFloat()),
             ) {
+                Box(modifier = Modifier.width(48.dp))
                 Text(
                     text = sessionName,
                     color = Color.White
                 )
+                Box(modifier = Modifier.width(48.dp), contentAlignment = Alignment.CenterEnd) {
+                    if (isHost) {
+                        Box {
+                            IconButton(onClick = onHostOptionsClick) {
+                                Icon(
+                                    imageVector = Icons.Default.MoreVert,
+                                    contentDescription = "Host options",
+                                    tint = Color.White
+                                )
+                            }
+                            androidx.compose.material3.DropdownMenu(
+                                expanded = showHostOptions,
+                                onDismissRequest = onHostOptionsDismiss
+                            ) {
+                                androidx.compose.material3.DropdownMenuItem(
+                                    text = { Text("Participants") },
+                                    onClick = onParticipantsClick
+                                )
+                                androidx.compose.material3.DropdownMenuItem(
+                                    text = { Text("Admit Participants") },
+                                    onClick = onAdmitParticipantsClick
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
         AnimatedVisibility(

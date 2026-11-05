@@ -21,7 +21,8 @@ record JWTOptions(
         Integer cloud_recording_election,
         String telemetry_tracking_id,
         Integer video_webrtc_mode,
-        Integer audio_webrtc_mode
+        Integer audio_webrtc_mode,
+        Integer hold
 ){}
 
 public class TokenGenerator {
@@ -49,6 +50,7 @@ public class TokenGenerator {
         claims.put("telemetry_tracking_id", jwtOptions.telemetry_tracking_id());
         claims.put("video_webrtc_mode", jwtOptions.video_webrtc_mode());
         claims.put("audio_webrtc_mode", jwtOptions.audio_webrtc_mode());
+        claims.put("hold", jwtOptions.hold());
 
         return Jwts.builder()
                 .header().add("typ", "JWT")
@@ -60,8 +62,8 @@ public class TokenGenerator {
 
     public static void main(String[] args) {
 
-        if (args.length != 4) {
-            System.out.println("Must provide all 4 arguments in this order: [topic] [role(0 or 1)] [sdk key] [sdk secret]");
+        if (args.length != 5) {
+            System.out.println("Must provide all 5 arguments in this order: [topic] [role(0 or 1)] [sdk key] [sdk secret] [hold(0, 1, or 2)]");
             return;
         }
 
@@ -75,7 +77,8 @@ public class TokenGenerator {
                 0,
                 "internal-dev5",
                 0,
-                0
+                0,
+                Integer.parseInt(args[4])
         );
 
         String signature = TokenGenerator.generateToken(body, args[2], args[3]);

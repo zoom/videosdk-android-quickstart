@@ -37,6 +37,7 @@ data class JWTOptions(
     @SerializedName("telemetry_tracking_id") val telemetry_tracking_id: String,
     @SerializedName("video_webrtc_mode") val video_webrtc_mode: Int,
     @SerializedName("audio_webrtc_mode") val audio_webrtc_mode: Int,
+    @SerializedName("hold") val hold: Int,
 )
 
 data class Signature(val signature: String)
@@ -68,7 +69,6 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
     var jwtToken by remember {
         mutableStateOf("")
     }
-
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -120,7 +120,6 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
             placeholder = {
                 Text("")
             })
-
         Row {
             Button(onClick = {
                 val body = JWTOptions(
@@ -133,7 +132,8 @@ fun JoinSession(navController: NavController, zoomSessionViewModel: ZoomSessionV
                     cloud_recording_election = 0,
                     telemetry_tracking_id = "internal-dev5",
                     video_webrtc_mode = 0,
-                    audio_webrtc_mode = 0
+                    audio_webrtc_mode = 0,
+                    hold = 1
                 )
 
                 if (endpointURL.isEmpty()) {

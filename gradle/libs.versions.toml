@@ -1,12 +1,12 @@
 [versions]
 accompanistPermissions = "0.37.3"
-agp = "8.8.1"
+agp = "8.13.2"
 coilCompose = "3.2.0"
 coilNetworkOkhttp = "3.2.0"
 converterGson = "2.10.0"
 dotenvKotlin = "2.0.0"
 kotlin = "2.0.0"
-coreKtx = "1.10.1"
+coreKtx = "1.18.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -16,8 +16,8 @@ composeBom = "2024.04.01"
 navigationCompose = "2.8.9"
 prettyPrint = "2.0.8"
 retrofit = "2.10.0"
-zoomvideosdkCore = "2.5.7"
-constraintlayout = "2.2.1"
+zoomvideosdkCore = "2.6.11"
+constraintlayout = "2.2.2"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }

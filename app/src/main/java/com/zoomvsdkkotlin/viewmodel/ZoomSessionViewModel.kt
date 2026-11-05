@@ -14,6 +14,7 @@ import us.zoom.sdk.ZoomVideoSDKAudioHelper
 import us.zoom.sdk.ZoomVideoSDKAudioStatus
 import us.zoom.sdk.ZoomVideoSDKErrors
 import us.zoom.sdk.ZoomVideoSDKInitParams
+import us.zoom.sdk.ZoomVideoSDKOnHoldUser
 import us.zoom.sdk.ZoomVideoSDKSession
 import us.zoom.sdk.ZoomVideoSDKSessionContext
 import us.zoom.sdk.ZoomVideoSDKUser
@@ -21,7 +22,13 @@ import us.zoom.sdk.ZoomVideoSDKVideoAspect
 import us.zoom.sdk.ZoomVideoSDKVideoCanvas
 import us.zoom.sdk.ZoomVideoSDKVideoResolution
 import us.zoom.sdk.ZoomVideoSDKVideoView
+import java.util.LinkedHashMap
 import kotlin.math.ceil
+
+data class OnHoldParticipant(
+    val userId: String,
+    val userName: String
+)
 
 data class ZoomSessionUIState(
     val selfView: ZoomVideoSDKVideoView? = null,
@@ -36,7 +43,11 @@ data class ZoomSessionUIState(
     val pageNumber: Int = 1,
     val maxPages: Int = 1,
     val participantVideoOn: List<Boolean> = listOf(false, false, false, false),
-    val participantMuted: List<Boolean> = listOf(false, false, false, false)
+    val participantMuted: List<Boolean> = listOf(false, false, false, false),
+    val waitingForHostAdmission: Boolean = false,
+    val isHost: Boolean = false,
+    val holdEnabled: Boolean = false,
+    val onHoldParticipants: List<OnHoldParticipant> = emptyList()
 )
 
 class ZoomSessionViewModel(application: Application): AndroidViewModel(application) {
@@ -44,6 +55,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
     private val context: Context = getApplication<Application>().applicationContext
     private val _zoomSessionUIState = MutableStateFlow(ZoomSessionUIState())
     private var currentUsersInView: List<ZoomVideoSDKUser> = emptyList()
+    private val onHoldUsers: LinkedHashMap<String, ZoomVideoSDKOnHoldUser> = LinkedHashMap()
     val zoomSessionUIState: StateFlow<ZoomSessionUIState> = _zoomSessionUIState.asStateFlow()
 
     fun initZoomSDK () {
@@ -90,6 +102,7 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
     fun closeSession(end: Boolean) {
         this.stopVideo()
         this.stopAudio()
+        onHoldUsers.clear()
         _zoomSessionUIState.update {
             it.copy(
                 selfView = null,
@@ -103,7 +116,11 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
                 audioConnected = false,
                 pageNumber = 1,
                 participantVideoOn = listOf(false, false, false, false),
-                participantMuted = listOf(false, false, false, false)
+                participantMuted = listOf(false, false, false, false),
+                waitingForHostAdmission = false,
+                isHost = false,
+                holdEnabled = false,
+                onHoldParticipants = emptyList()
             )
         }
         this.currentUsersInView = emptyList()
@@ -221,5 +238,93 @@ class ZoomSessionViewModel(application: Application): AndroidViewModel(applicati
     fun stopRenderSelfView(user: ZoomVideoSDKUser) {
         val canvas: ZoomVideoSDKVideoCanvas = user.videoCanvas
         canvas.unSubscribe(_zoomSessionUIState.value.selfView)
+    }
+
+    fun setWaitingForHostAdmission(waiting: Boolean) {
+        _zoomSessionUIState.update { it.copy(waitingForHostAdmission = waiting) }
+    }
+
+    fun refreshHostAndHoldState() {
+        val myself = ZoomVideoSDK.getInstance().session.mySelf
+        val onHoldHelper = ZoomVideoSDK.getInstance().onHoldHelper
+        _zoomSessionUIState.update {
+            it.copy(
+                isHost = myself.isHost,
+                holdEnabled = onHoldHelper?.isOnHoldEnabled == true
+            )
+        }
+    }
+
+    fun ensureHoldEnabledForHost() {
+        val myself = ZoomVideoSDK.getInstance().session.mySelf
+        val onHoldHelper = ZoomVideoSDK.getInstance().onHoldHelper ?: return
+        if (myself.isHost && !onHoldHelper.isOnHoldEnabled) {
+            val result = onHoldHelper.enableHold(true)
+            if (result != ZoomVideoSDKErrors.Errors_Success) {
+                println("Failed to enable hold by default: $result")
+            }
+        }
+        _zoomSessionUIState.update {
+            it.copy(holdEnabled = onHoldHelper.isOnHoldEnabled)
+        }
+    }
+
+    fun getAllSessionUsers(): List<ZoomVideoSDKUser> {
+        val session = ZoomVideoSDK.getInstance().session
+        return listOf(session.mySelf) + session.remoteUsers
+    }
+
+    fun refreshOnHoldUsersFromHelper() {
+        val users = ZoomVideoSDK.getInstance().onHoldHelper?.onHoldUserList ?: emptyList()
+        onHoldUsers.clear()
+        users.forEach { user -> onHoldUsers[user.userID] = user }
+        publishOnHoldUsers()
+    }
+
+    fun addOnHoldUsers(userList: List<ZoomVideoSDKOnHoldUser?>?) {
+        userList?.filterNotNull()?.forEach { user -> onHoldUsers[user.userID] = user }
+        publishOnHoldUsers()
+    }
+
+    fun removeOnHoldUsers(userList: List<ZoomVideoSDKOnHoldUser?>?) {
+        userList?.filterNotNull()?.forEach { user -> onHoldUsers.remove(user.userID) }
+        publishOnHoldUsers()
+    }
+
+    fun setHoldEnabled(enabled: Boolean): Int {
+        val result = ZoomVideoSDK.getInstance().onHoldHelper?.enableHold(enabled) ?: ZoomVideoSDKErrors.Errors_Unknown
+        if (result == ZoomVideoSDKErrors.Errors_Success) {
+            _zoomSessionUIState.update { it.copy(holdEnabled = enabled) }
+        }
+        return result
+    }
+
+    fun admitOnHoldUser(userId: String): Int {
+        val user = onHoldUsers[userId] ?: return ZoomVideoSDKErrors.Errors_Unknown
+        val result = ZoomVideoSDK.getInstance().onHoldHelper?.admit(user) ?: ZoomVideoSDKErrors.Errors_Unknown
+        if (result == ZoomVideoSDKErrors.Errors_Success) {
+            onHoldUsers.remove(userId)
+            publishOnHoldUsers()
+        }
+        return result
+    }
+
+    fun admitAllOnHoldUsers(): Int {
+        val result = ZoomVideoSDK.getInstance().onHoldHelper?.admitAll() ?: ZoomVideoSDKErrors.Errors_Unknown
+        if (result == ZoomVideoSDKErrors.Errors_Success) {
+            onHoldUsers.clear()
+            publishOnHoldUsers()
+        }
+        return result
+    }
+
+    private fun publishOnHoldUsers() {
+        _zoomSessionUIState.update {
+            it.copy(
+                onHoldParticipants = onHoldUsers.values.map { user ->
+                    OnHoldParticipant(user.userID, user.userName)
+                }
+            )
+        }
     }
 }
